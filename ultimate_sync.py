@@ -72,6 +72,19 @@ for i in range(1, 7):
     with open("src/App.jsx", "w") as f:
         f.write(new_app)
 
+    # 4. 修改 favicon.svg 顏色以區分主網站與分支
+    try:
+        with open("favicon.svg", "r") as f:
+            fav = f.read()
+        # 藍色系換成橘色系
+        fav = fav.replace("#2563EB", "#EA580C")
+        fav = fav.replace("#1E3A8A", "#9A3412")
+        fav = fav.replace("#1E40AF", "#9A3412")
+        with open("favicon.svg", "w") as f:
+            f.write(fav)
+    except Exception as e:
+        print(f"修改 favicon 失敗: {e}")
+
     # 驗證修改是否正確
     with open("src/App.jsx", "r") as f:
         check = f.read()
