@@ -100,8 +100,15 @@ for i in range(1, 7):
 
     # 提交並強制推送
     run("git add -A")
-    run(f"git commit -m '正確切割：{branch} 顯示第 1 至 {i} 課'")
-    run(f"git push origin {branch} --force")
+    try:
+        run(f"git commit -m '正確切割：{branch} 顯示第 {i} 至 {i} 課'")
+    except:
+        pass
+    
+    try:
+        run(f"git push origin {branch} --force")
+    except Exception as e:
+        print(f"警告: 推送 {branch} 失敗: {e}")
 
     print(f"等待 35 秒防塞車...")
     time.sleep(35)
