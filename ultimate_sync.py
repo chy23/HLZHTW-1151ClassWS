@@ -76,12 +76,17 @@ for i in range(1, 7):
     try:
         with open("favicon.svg", "r") as f:
             fav = f.read()
-        # 藍色系換成橘色系
         fav = fav.replace("#2563EB", "#EA580C")
         fav = fav.replace("#1E3A8A", "#9A3412")
         fav = fav.replace("#1E40AF", "#9A3412")
         with open("favicon.svg", "w") as f:
             f.write(fav)
+            
+        with open("index.html", "r") as f:
+            idx = f.read()
+        idx = idx.replace('href="/favicon.jpg"', 'href="/favicon.svg"').replace('type="image/jpeg"', 'type="image/svg+xml"')
+        with open("index.html", "w") as f:
+            f.write(idx)
     except Exception as e:
         print(f"修改 favicon 失敗: {e}")
 
