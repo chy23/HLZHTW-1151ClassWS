@@ -74,12 +74,12 @@ for i in range(1, 7):
 
     # 4. 修改 favicon.svg 顏色以區分主網站與分支
     try:
-        with open("favicon.svg", "r") as f:
+        with open("public/favicon.svg", "r") as f:
             fav = f.read()
         fav = fav.replace("#2563EB", "#EA580C")
         fav = fav.replace("#1E3A8A", "#9A3412")
         fav = fav.replace("#1E40AF", "#9A3412")
-        with open("favicon.svg", "w") as f:
+        with open("public/favicon.svg", "w") as f:
             f.write(fav)
             
         with open("index.html", "r") as f:
