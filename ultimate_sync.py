@@ -28,7 +28,7 @@ try:
 except Exception as e:
     print(f"警告: 推送主網址失敗: {e}")
 
-for i in range(1, 7):
+for i in range(1, 13):
     branch = f"115-1-L{i}"
     print(f"\n========== 處理分支 {branch} ==========")
 
