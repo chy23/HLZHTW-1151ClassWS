@@ -451,38 +451,46 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
             班級：_______ 座號：_______ 姓名：_____________
           </div>
 
-          <section className="mb-14">
-            <h2 className="font-bold text-slate-800 text-xl mb-4">任務一、文意理解，深入認識課文</h2>
-            <div className="mb-8 space-y-2">
-              {lesson.task1.map((item, i) => (
-                <div key={i} style={{ marginLeft: `${item.indent * 2}em` }} className={`leading-relaxed ${item.isBox ? 'border-2 border-slate-800 p-4 rounded bg-white my-4 font-bold' : ''}`}>
-                  {parseTask1(item.text, showAllAnswers)}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="mb-14">
-            <h2 className="font-bold text-slate-800 text-xl mb-4 leading-relaxed">
-              任務二、閱讀測驗，讀完課文之後，你了解課文內容和作者的想法嗎？<br />
-              請依據課文回答下面的問題。（在□裡打「✓」）
-            </h2>
-            <div className="space-y-6 mt-6">
-              {lesson.quiz.map((q, i) => <QuizBlock key={i} qIdx={i} q={q.q} options={q.options} a={q.a} showAllAnswers={showAllAnswers} />)}
-            </div>
-          </section>
-
-          <section className="mb-14">
-            <h2 className="font-bold text-slate-800 text-xl mb-4">任務三、句型練習</h2>
-            <div className="space-y-8 mt-6">
-              {lesson.practices.map((p, i) => <PracticeBlock key={i} index={i} p={p} showAllAnswers={showAllAnswers} />)}
-            </div>
-            {lesson.sentences && (
-              <div className="space-y-6 mt-8">
-                {lesson.sentences.map((s, i) => <SentenceBlock key={i} word={s.word} ex={s.ex} showAllAnswers={showAllAnswers} />)}
+          {lesson.task1 && lesson.task1.length > 0 && (
+            <section className="mb-14">
+              <h2 className="font-bold text-slate-800 text-xl mb-4">任務一、文意理解，深入認識課文</h2>
+              <div className="mb-8 space-y-2">
+                {lesson.task1.map((item, i) => (
+                  <div key={i} style={{ marginLeft: `${item.indent * 2}em` }} className={`leading-relaxed ${item.isBox ? 'border-2 border-slate-800 p-4 rounded bg-white my-4 font-bold' : ''}`}>
+                    {parseTask1(item.text, showAllAnswers)}
+                  </div>
+                ))}
               </div>
-            )}
-          </section>
+            </section>
+          )}
+
+          {lesson.quiz && lesson.quiz.length > 0 && (
+            <section className="mb-14">
+              <h2 className="font-bold text-slate-800 text-xl mb-4 leading-relaxed">
+                任務二、閱讀測驗，讀完課文之後，你了解課文內容和作者的想法嗎？<br />
+                請依據課文回答下面的問題。（在□裡打「✓」）
+              </h2>
+              <div className="space-y-6 mt-6">
+                {lesson.quiz.map((q, i) => <QuizBlock key={i} qIdx={i} q={q.q} options={q.options} a={q.a} showAllAnswers={showAllAnswers} />)}
+              </div>
+            </section>
+          )}
+
+          {(lesson.practices || lesson.sentences) && (
+            <section className="mb-14">
+              <h2 className="font-bold text-slate-800 text-xl mb-4">任務三、句型練習</h2>
+              {lesson.practices && (
+                <div className="space-y-8 mt-6">
+                  {lesson.practices.map((p, i) => <PracticeBlock key={i} index={i} p={p} showAllAnswers={showAllAnswers} />)}
+                </div>
+              )}
+              {lesson.sentences && (
+                <div className="space-y-6 mt-8">
+                  {lesson.sentences.map((s, i) => <SentenceBlock key={i} word={s.word} ex={s.ex} showAllAnswers={showAllAnswers} />)}
+                </div>
+              )}
+            </section>
+          )}
 
           {lesson.task4 && (
             <section className="mb-10">
