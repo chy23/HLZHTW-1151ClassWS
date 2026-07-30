@@ -1170,7 +1170,7 @@ export const lessons = [
     "id": "lesson-7",
     "lessonNum": "第七課",
     "lessonName": "跟著公共藝術去旅行",
-    "author": "",
+    "author": "張育雯",
     "task1": [
       {
         "indent": 1,
@@ -1363,7 +1363,7 @@ export const lessons = [
     "id": "lesson-8",
     "lessonNum": "第八課",
     "lessonName": "街頭藝術家",
-    "author": "",
+    "author": "桂文亞",
     "task1": [
       {
         "indent": 1,
@@ -1567,7 +1567,7 @@ export const lessons = [
     "id": "lesson-9",
     "lessonNum": "第九課",
     "lessonName": "戲臺上的她與他",
-    "author": "",
+    "author": "李光福",
     "task1": [
       {
         "indent": 1,
@@ -1776,7 +1776,7 @@ export const lessons = [
     "id": "lesson-10",
     "lessonNum": "第十課",
     "lessonName": "過故人莊",
-    "author": "",
+    "author": "孟浩然",
     "task1": [
       {
         "indent": 1,
@@ -1981,7 +1981,7 @@ export const lessons = [
     "id": "lesson-11",
     "lessonNum": "第十一課",
     "lessonName": "來一碗溫暖的羹湯",
-    "author": "",
+    "author": "陳維鸚",
     "task1": [
       {
         "indent": 1,
@@ -2170,7 +2170,7 @@ export const lessons = [
     "id": "lesson-12",
     "lessonNum": "第十二課",
     "lessonName": "存根",
-    "author": "",
+    "author": "阿拉爾孔",
     "quiz": [
       {
         "q": "故事中布大爺對自己所種的南瓜有什麼情感？",
