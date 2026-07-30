@@ -445,7 +445,7 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
         >
 
           <h1 className="font-bold text-center mb-4 text-slate-800 text-2xl relative z-10">
-            115 五上國語學習講義翰林版 {lesson.lessonNum} {lesson.lessonName} 作者：{lesson.author}
+            115 六上國語學習講義翰林版 {lesson.lessonNum} {lesson.lessonName} 作者：{lesson.author}
           </h1>
           <div className="text-center font-bold text-xl mb-12 text-slate-800">
             班級：_______ 座號：_______ 姓名：_____________
