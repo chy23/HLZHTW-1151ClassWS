@@ -243,12 +243,19 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
 
   useEffect(() => {
     const handleMouseUp = () => {
-      if (toolMode === 'pen') {
-        const selection = window.getSelection();
-        if (!selection.isCollapsed && selection.rangeCount > 0) {
+      const selection = window.getSelection();
+      if (!selection.isCollapsed && selection.rangeCount > 0) {
+        if (toolMode === 'pen') {
           document.designMode = "on";
           document.execCommand("HiliteColor", false, "#fef08a");
           document.execCommand("backColor", false, "#fef08a");
+          document.designMode = "off";
+          selection.removeAllRanges();
+        } else if (toolMode === 'eraser') {
+          document.designMode = "on";
+          // Use transparent background to "erase" the specific selection
+          document.execCommand("HiliteColor", false, "transparent");
+          document.execCommand("backColor", false, "transparent");
           document.designMode = "off";
           selection.removeAllRanges();
         }
@@ -521,8 +528,8 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
 
       {/* 浮動工具列 */}
       <div className="no-print fixed bottom-8 right-8 bg-white/90 backdrop-blur-md p-3 rounded-full shadow-2xl border border-slate-200 flex flex-col space-y-3 z-50">
-        <button onClick={() => setToolMode(toolMode === 'pen' ? 'none' : 'pen')} className={`p-4 rounded-full transition-all ${toolMode === 'pen' ? 'bg-yellow-300 text-yellow-800 shadow-inner' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}`} title="螢光筆畫記"><PenTool size={24} /></button>
-        <button onClick={() => setToolMode(toolMode === 'eraser' ? 'none' : 'eraser')} className={`p-4 rounded-full transition-all ${toolMode === 'eraser' ? 'bg-pink-300 text-pink-800 shadow-inner' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}`} title="消除畫記"><Eraser size={24} /></button>
+        <button onClick={() => setToolMode(toolMode === 'pen' ? 'none' : 'pen')} className={`p-4 rounded-full transition-all ${toolMode === 'pen' ? 'bg-yellow-300 text-yellow-800 shadow-inner' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}`} title="螢光筆畫記 (選取文字來畫記)"><PenTool size={24} /></button>
+        <button onClick={() => setToolMode(toolMode === 'eraser' ? 'none' : 'eraser')} className={`p-4 rounded-full transition-all ${toolMode === 'eraser' ? 'bg-pink-300 text-pink-800 shadow-inner' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}`} title="橡皮擦 (點擊螢光筆，或選取文字來擦除)"><Eraser size={24} /></button>
         <button onClick={clearAllHighlight} className="p-4 rounded-full bg-slate-100 hover:bg-red-100 hover:text-red-600 text-slate-600 transition-colors" title="清除所有畫記"><Trash2 size={24} /></button>
       </div>
     </div>
