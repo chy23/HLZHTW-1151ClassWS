@@ -17,11 +17,11 @@ function App() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-teal-100/40 blur-3xl" />
       </div>
 
-      {/* 固定浮水印 - 不跟著捲動，永遠固定在畫面角落 */}
-      <div className="fixed top-4 right-4 z-50 pointer-events-none select-none no-print text-slate-400/50 text-xs font-bold tracking-widest">
+      {/* 固定浮水印 - 不跟著捲動，永遠固定在畫面角落，避開上方控制列與右下角工具列 */}
+      <div className="fixed top-[100px] right-8 z-50 pointer-events-none select-none no-print text-slate-500/25 text-[18pt] font-bold tracking-widest">
         網站建立自楊家驊老師
       </div>
-      <div className="fixed bottom-4 right-4 z-50 pointer-events-none select-none no-print text-slate-400/50 text-xs font-bold tracking-widest">
+      <div className="fixed bottom-8 right-28 z-50 pointer-events-none select-none no-print text-slate-500/25 text-[18pt] font-bold tracking-widest">
         網站建立自楊家驊老師
       </div>
 
