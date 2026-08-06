@@ -4,12 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'src/data/**'
-      - 'public/data/**'
-      - 'ultimate_sync.py'
-      - 'src/components/**'
-      - 'src/App.jsx'
 
 permissions:
   contents: write
@@ -21,12 +15,17 @@ jobs:
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for all branches
+          fetch-depth: 0  # 必須抓取所有分支歷史
 
-      - name: Configure Git
+      - name: Configure Git with Token Auth
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # 用 GITHUB_TOKEN 設定 remote URL，這樣 git push 才有權限
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+      - name: Install Python deps (if any)
+        run: pip install --quiet requests 2>/dev/null || true
 
       - name: Run ultimate_sync.py
         run: python3 ultimate_sync.py
