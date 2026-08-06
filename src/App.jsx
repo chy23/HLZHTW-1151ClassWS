@@ -77,7 +77,7 @@ function App() {
   }, [currentLessonId]);
 
   return (
-    <div className={`flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-900 selection:bg-blue-100 dark:selection:bg-blue-900 relative transition-colors duration-300`}>
+    <div className={`flex flex-col h-screen bg-slate-50 dark:bg-slate-900 selection:bg-blue-100 dark:selection:bg-blue-900 relative transition-colors duration-300`}>
       {/* Background Decor */}
       <div className="fixed inset-0 pointer-events-none no-print overflow-hidden">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 dark:bg-blue-900/20 blur-3xl transition-colors duration-300" />
@@ -100,33 +100,35 @@ function App() {
         網站建立自楊家驊老師
       </div>
 
-      <Sidebar
-        lessons={lessons}
-        currentLessonId={currentLessonId}
-        onSelectLesson={setCurrentLessonId}
-        isOpen={isSidebarOpen}
-        setIsOpen={setIsSidebarOpen}
-      />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar
+          lessons={lessons}
+          currentLessonId={currentLessonId}
+          onSelectLesson={setCurrentLessonId}
+          isOpen={isSidebarOpen}
+          setIsOpen={setIsSidebarOpen}
+        />
 
-      <main className="flex-1 h-screen overflow-y-auto relative z-10 no-scrollbar">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-full text-slate-500 dark:text-slate-400 font-medium text-lg">
-            載入中...
-          </div>
-        ) : currentLessonData ? (
-          <HandoutViewer 
-            lesson={currentLessonData} 
-            isSidebarOpen={isSidebarOpen} 
-            setIsSidebarOpen={setIsSidebarOpen} 
-            isDarkMode={isDarkMode}
-            setIsDarkMode={setIsDarkMode}
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-slate-500 dark:text-slate-400 font-medium text-lg">
-            請從左側選單選擇一課開始
-          </div>
-        )}
-      </main>
+        <main className="flex-1 h-full overflow-y-auto relative z-10 no-scrollbar">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-full text-slate-500 dark:text-slate-400 font-medium text-lg">
+              載入中...
+            </div>
+          ) : currentLessonData ? (
+            <HandoutViewer 
+              lesson={currentLessonData} 
+              isSidebarOpen={isSidebarOpen} 
+              setIsSidebarOpen={setIsSidebarOpen} 
+              isDarkMode={isDarkMode}
+              setIsDarkMode={setIsDarkMode}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-slate-500 dark:text-slate-400 font-medium text-lg">
+              請從左側選單選擇一課開始
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
