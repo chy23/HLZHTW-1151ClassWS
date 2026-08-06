@@ -452,6 +452,13 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen,
           國語課堂學習單
         </div>
         <div className="flex gap-3 flex-wrap justify-center items-center">
+          {/* 版權註記 */}
+          <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 p-1.5 rounded text-right leading-tight mr-1 hidden md:block">
+            學習單資料取自「翰林出版社」<br/>
+            網站內容僅限用於孩子學習使用<br/>
+            <span className="text-red-600 font-bold">切勿用於商業行為</span>
+          </div>
+
           {/* 深色模式與全解答 */}
           <div className="flex bg-slate-100 dark:bg-slate-700 rounded-lg p-1 border border-slate-200 dark:border-slate-600 shadow-sm">
             <button onClick={() => setIsDarkMode(!isDarkMode)} className={`p-1.5 rounded-md transition-colors ${isDarkMode ? 'text-amber-400 bg-slate-800' : 'text-slate-500 hover:bg-slate-200'}`} title="深色模式切換">
