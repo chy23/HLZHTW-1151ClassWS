@@ -5,11 +5,25 @@
     <link rel="icon" type="image/jpeg" href="/HLZHTW-1151ClassWS/favicon.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HLZHTW-1151ClassWS</title>
-    <script type="module" crossorigin src="/HLZHTW-1151ClassWS/assets/index-BsAKZO1t.js"></script>
+    <script type="module" crossorigin src="/HLZHTW-1151ClassWS/assets/index-Dtq-qDAa.js"></script>
     <link rel="stylesheet" crossorigin href="/HLZHTW-1151ClassWS/assets/index-CnjOHCds.css">
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      window.addEventListener('error', function(e) {
+        var errDiv = document.createElement('div');
+        errDiv.style = 'position:fixed;top:0;left:0;width:100%;height:100%;background:red;color:white;z-index:99999;padding:20px;font-size:16px;overflow:auto;';
+        errDiv.innerHTML = '<h2>Global Error Caught</h2><pre>' + e.message + '\\n' + e.filename + ':' + e.lineno + '</pre>';
+        document.body.appendChild(errDiv);
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        var errDiv = document.createElement('div');
+        errDiv.style = 'position:fixed;top:0;left:0;width:100%;height:100%;background:purple;color:white;z-index:99999;padding:20px;font-size:16px;overflow:auto;';
+        errDiv.innerHTML = '<h2>Unhandled Promise Rejection</h2><pre>' + (e.reason && e.reason.stack ? e.reason.stack : e.reason) + '</pre>';
+        document.body.appendChild(errDiv);
+      });
+    </script>
     <!-- 網站建立自楊家驊老師 The website was created by Teacher ChiahuaYang -->
   </body>
 </html>
