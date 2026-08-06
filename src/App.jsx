@@ -52,7 +52,8 @@ function App() {
       .then(data => {
         setLessons(data);
         // 如果沒有選定課文，或選定的課文不在目錄中，則預設為第一課
-        if (data.length > 0 && (!currentLessonId || !data.find(l => l.id === currentLessonId))) {
+        const storedId = JSON.parse(window.localStorage.getItem('hlzhtw_current_lesson') || 'null');
+        if (data.length > 0 && (!storedId || !data.find(l => l.id === storedId))) {
           setCurrentLessonId(data[0].id);
         }
       })

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { PenTool, Eraser, Trash2, Menu, Moon, Sun, Brush, Type, Eye, EyeOff } from 'lucide-react';
+import { PenTool, Eraser, Trash2, Menu, Moon, Sun, Brush, Type, Eye, EyeOff, ZoomIn, ZoomOut } from 'lucide-react';
 
 const checkTool = () => document.body.classList.contains('cursor-eraser') || document.body.classList.contains('cursor-pen');
 
@@ -284,26 +284,45 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen,
   }, [toolMode]);
 
   // 畫布事件處理
+  const [isDrawing, setIsDrawing] = useState(false);
   const handlePointerDown = (e) => {
-    if (toolMode !== 'draw') return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / zoomLevel;
-    const y = (e.clientY - rect.top) / zoomLevel;
-    setCurrentPath(`M ${x} ${y}`);
+    if (toolMode === 'draw') {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / zoomLevel;
+      const y = (e.clientY - rect.top) / zoomLevel;
+      setCurrentPath(`M ${x} ${y}`);
+      setIsDrawing(true);
+    } else if (toolMode === 'eraser') {
+      setIsDrawing(true);
+    }
   };
 
   const handlePointerMove = (e) => {
-    if (toolMode !== 'draw' || !currentPath) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / zoomLevel;
-    const y = (e.clientY - rect.top) / zoomLevel;
-    setCurrentPath(prev => `${prev} L ${x} ${y}`);
+    if (toolMode === 'draw' && currentPath && isDrawing) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / zoomLevel;
+      const y = (e.clientY - rect.top) / zoomLevel;
+      setCurrentPath(prev => `${prev} L ${x} ${y}`);
+    }
   };
 
   const handlePointerUp = () => {
-    if (toolMode !== 'draw' || !currentPath) return;
-    setPaths(prev => [...prev, currentPath]);
-    setCurrentPath(null);
+    setIsDrawing(false);
+    if (toolMode === 'draw' && currentPath) {
+      setPaths(prev => [...prev, currentPath]);
+      setCurrentPath(null);
+    }
+  };
+
+  const handleErasePath = (index) => {
+    if (toolMode === 'eraser' && isDrawing) {
+      setPaths(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+  const handleClickPath = (index) => {
+    if (toolMode === 'eraser') {
+      setPaths(prev => prev.filter((_, i) => i !== index));
+    }
   };
 
   const clearAllHighlight = () => {
@@ -444,11 +463,11 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen,
             </button>
           </div>
 
-          {/* 字體大小 */}
-          <div className="flex items-center bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-            <button onClick={() => setZoomLevel(0.8)} className={`px-3 py-1.5 text-sm font-bold transition-colors ${zoomLevel === 0.8 ? 'bg-blue-500 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>A-</button>
-            <button onClick={() => setZoomLevel(1)} className={`px-3 py-1.5 text-sm font-bold transition-colors border-x border-slate-200 dark:border-slate-600 ${zoomLevel === 1 ? 'bg-blue-500 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>A</button>
-            <button onClick={() => setZoomLevel(1.3)} className={`px-3 py-1.5 text-sm font-bold transition-colors ${zoomLevel === 1.3 ? 'bg-blue-500 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>A+</button>
+          {/* 縮放 */}
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+            <button onClick={() => setZoomLevel(z => Math.max(0.5, parseFloat((z - 0.1).toFixed(1))))} className="p-1 hover:bg-white dark:hover:bg-slate-800 rounded text-slate-600 dark:text-slate-300" title="縮小"><ZoomOut size={18} /></button>
+            <span className="text-sm font-bold w-12 text-center text-slate-700 dark:text-slate-300">{Math.round(zoomLevel * 100)}%</span>
+            <button onClick={() => setZoomLevel(z => Math.min(2, parseFloat((z + 0.1).toFixed(1))))} className="p-1 hover:bg-white dark:hover:bg-slate-800 rounded text-slate-600 dark:text-slate-300" title="放大"><ZoomIn size={18} /></button>
           </div>
 
           {/* 拉寬版面 */}
@@ -474,17 +493,28 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen,
         >
           {/* 畫布層 (絕對定位覆蓋整個區域) */}
           <svg 
-            className={`absolute inset-0 w-full h-full z-30 pointer-events-${toolMode === 'draw' ? 'auto' : 'none'} no-print`}
+            className={`absolute inset-0 w-full h-full z-30 pointer-events-${(toolMode === 'draw' || toolMode === 'eraser') ? 'auto' : 'none'} no-print`}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
           >
             {paths.map((p, i) => (
-              <path key={i} d={p} stroke="red" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <path 
+                key={i} 
+                d={p} 
+                stroke="red" 
+                strokeWidth="4" 
+                fill="none" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                onPointerOver={() => handleErasePath(i)}
+                onPointerDown={() => handleClickPath(i)}
+                style={{ cursor: toolMode === 'eraser' ? 'cell' : 'crosshair' }}
+              />
             ))}
             {currentPath && (
-              <path d={currentPath} stroke="red" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <path d={currentPath} stroke="red" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             )}
           </svg>
 
