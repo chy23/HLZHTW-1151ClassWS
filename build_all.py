@@ -83,5 +83,9 @@ finally:
             f.write(ORIGINAL_INDEX_HTML)
     except Exception:
         pass
+    
+    # 建立 .nojekyll 防止 GitHub Pages Jekyll 編譯失敗
+    with open(os.path.join(FINAL_DIST, ".nojekyll"), "w") as f:
+        pass
 
-print("\n✅ 所有編譯完成，發布包已生成於 final_dist/ 資料夾。")
+    print("\n✅ 所有編譯完成，發布包已生成於 final_dist/ 資料夾。")
