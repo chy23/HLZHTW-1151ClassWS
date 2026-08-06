@@ -1,27 +1,16 @@
 import subprocess
 import time
 import re
+import json
 
 def run(cmd):
     print(f"Running: {cmd}")
     subprocess.run(cmd, shell=True, check=True)
 
-# 先讀取 main 分支的 App.jsx 原始內容，備份起來
-run("git checkout main")
+# 讀取 main 分支的原始 index 資料
+with open("public/data/lessons_index.json", "r", encoding="utf-8") as f:
+    ORIGINAL_INDEX = json.load(f)
 
-try:
-    run("git add -A")
-    run("git commit -m '同步最新修正'")
-except:
-    pass
-
-# 讀取 main 的原始 App.jsx（一定要在 checkout main 之後）
-with open("src/App.jsx", "r") as f:
-    ORIGINAL_APP_JSX = f.read()
-
-print(f"[確認] main 的 App.jsx 開頭: {ORIGINAL_APP_JSX[:150]}")
-
-# 推送主網址 (總表) - 用 --force 確保成功
 print("\n========== 上傳主網址 (總表) ==========")
 try:
     run("git push origin main --force")
@@ -47,30 +36,21 @@ for i in range(1, 13):
     with open("vite.config.js", "w") as f:
         f.write(v)
 
-    # 2. 修改 deploy.yml（每次從 main 版本重建，避免累積問題）
+    # 2. 修改 deploy.yml（加上 destination_dir）
     with open(".github/workflows/deploy.yml", "r") as f:
         deploy = f.read()
-
-    # 移除舊的 destination_dir 與重複 keep_files
     deploy = re.sub(r"\s*destination_dir:.*", "", deploy)
     deploy = re.sub(r"(keep_files: true\s*)+", "keep_files: true\n", deploy)
-    # 加上正確的 destination_dir
     deploy = deploy.replace("keep_files: true", f"keep_files: true\n          destination_dir: {branch}")
-    # 修正觸發分支
     deploy = re.sub(r"branches: \[.*?\]", f"branches: [ {branch} ]", deploy)
     deploy = re.sub(r"branches:\n      - \S+", f"branches:\n      - {branch}", deploy)
-
     with open(".github/workflows/deploy.yml", "w") as f:
         f.write(deploy)
 
-    # 3. 從備份的原始 App.jsx 重建，改成只顯示 1~i 課
-    # 直接用字串替換（用 ORIGINAL_APP_JSX 確保每次都是乾淨的原版）
-    new_app = ORIGINAL_APP_JSX.replace(
-        "import { lessons } from './data/lessons';",
-        f"import {{ lessons as allLessons }} from './data/lessons';\nconst lessons = allLessons.slice(0, {i});"
-    )
-    with open("src/App.jsx", "w") as f:
-        f.write(new_app)
+    # 3. 從備份的原始 JSON 重建，改成只顯示 1~i 課 (Lazy Loading index)
+    sliced_index = ORIGINAL_INDEX[:i]
+    with open("public/data/lessons_index.json", "w", encoding="utf-8") as f:
+        json.dump(sliced_index, f, ensure_ascii=False, indent=2)
 
     # 4. 修改 favicon.svg 顏色以區分主網站與分支
     try:
@@ -90,14 +70,6 @@ for i in range(1, 13):
     except Exception as e:
         print(f"修改 favicon 失敗: {e}")
 
-    # 驗證修改是否正確
-    with open("src/App.jsx", "r") as f:
-        check = f.read()
-    if f"slice(0, {i})" in check:
-        print(f"✅ App.jsx 已正確設定為 slice(0, {i})")
-    else:
-        print(f"❌ 警告！App.jsx 修改失敗，請手動檢查！")
-
     # 提交並強制推送
     run("git add -A")
     try:
@@ -110,8 +82,9 @@ for i in range(1, 13):
     except Exception as e:
         print(f"警告: 推送 {branch} 失敗: {e}")
 
-    print(f"等待 35 秒防塞車...")
-    time.sleep(35)
+    # GitHub Actions 不太會因為連續 push 塞車，但若真的需要延遲可以保留
+    # print(f"等待 10 秒...")
+    # time.sleep(10)
 
 run("git checkout main")
 print("\n✅ 全部修復並上傳完畢！")

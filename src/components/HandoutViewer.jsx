@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { PenTool, Eraser, Trash2, ZoomIn, ZoomOut, Menu } from 'lucide-react';
+import { PenTool, Eraser, Trash2, Menu, Moon, Sun, Brush, Type, Eye, EyeOff } from 'lucide-react';
 
 const checkTool = () => document.body.classList.contains('cursor-eraser') || document.body.classList.contains('cursor-pen');
 
@@ -26,7 +26,7 @@ const BlankWord = ({ text, globalShow }) => {
   }
   return (
     <span onClick={toggle}
-      className={`cursor-pointer px-2 mx-1 font-bold transition-colors select-none border-b-[3px] data-blankword ${isVisible ? 'text-red-600 border-red-300 bg-red-50' : 'text-transparent border-slate-400 bg-slate-100'}`}
+      className={`cursor-pointer px-2 mx-1 font-bold transition-colors select-none border-b-[3px] data-blankword ${isVisible ? 'text-red-600 border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/30' : 'text-transparent border-slate-400 bg-slate-100 dark:bg-slate-700'}`}
       data-text={text}>
       {text}
     </span>
@@ -44,7 +44,7 @@ const TableContent = ({ html, globalShow }) => {
       return `class="${p1}${p2}"`;
     })
     .replace(/\*(.*?)\*/g, (_, text) => {
-      return `<span class="table-blank cursor-pointer font-bold transition-colors text-transparent bg-slate-100 px-1 border-b-[3px] border-slate-400 select-none">${text}</span>`;
+      return `<span class="table-blank cursor-pointer font-bold transition-colors text-transparent bg-slate-100 dark:bg-slate-700 px-1 border-b-[3px] border-slate-400 select-none">${text}</span>`;
     });
 
   // 同步全域顯示狀態，並支援點擊切換
@@ -55,12 +55,12 @@ const TableContent = ({ html, globalShow }) => {
       const isRevealed = blank.classList.contains('text-red-600');
       // 如果 globalShow 為 true，強迫顯示；如果為 false，隱藏 (除非有手動揭開)
       if (globalShow) {
-        blank.classList.remove('text-transparent', 'bg-slate-100', 'border-slate-400');
-        blank.classList.add('text-red-600', 'bg-red-50', 'border-red-300');
+        blank.classList.remove('text-transparent', 'bg-slate-100 dark:bg-slate-700', 'border-slate-400');
+        blank.classList.add('text-red-600', 'bg-red-50 dark:bg-red-900/30', 'border-red-300 dark:border-red-800');
       } else {
         if (!isRevealed) {
-          blank.classList.add('text-transparent', 'bg-slate-100', 'border-slate-400');
-          blank.classList.remove('text-red-600', 'bg-red-50', 'border-red-300');
+          blank.classList.add('text-transparent', 'bg-slate-100 dark:bg-slate-700', 'border-slate-400');
+          blank.classList.remove('text-red-600', 'bg-red-50 dark:bg-red-900/30', 'border-red-300 dark:border-red-800');
         }
       }
     });
@@ -73,11 +73,11 @@ const TableContent = ({ html, globalShow }) => {
       e.stopPropagation();
       const isHidden = blank.classList.contains('text-transparent');
       if (isHidden) {
-        blank.classList.remove('text-transparent', 'bg-slate-100', 'border-slate-400');
-        blank.classList.add('text-red-600', 'bg-red-50', 'border-red-300');
+        blank.classList.remove('text-transparent', 'bg-slate-100 dark:bg-slate-700', 'border-slate-400');
+        blank.classList.add('text-red-600', 'bg-red-50 dark:bg-red-900/30', 'border-red-300 dark:border-red-800');
       } else {
-        blank.classList.add('text-transparent', 'bg-slate-100', 'border-slate-400');
-        blank.classList.remove('text-red-600', 'bg-red-50', 'border-red-300');
+        blank.classList.add('text-transparent', 'bg-slate-100 dark:bg-slate-700', 'border-slate-400');
+        blank.classList.remove('text-red-600', 'bg-red-50 dark:bg-red-900/30', 'border-red-300 dark:border-red-800');
       }
     }
   };
@@ -117,7 +117,7 @@ const QuizBlock = ({ qIdx, q, options, a, showAllAnswers }) => {
   };
   return (
     <div className="mb-6 cursor-pointer select-none group" onClick={toggle}>
-      <div className="font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors" style={{ marginLeft: '2em' }}>
+      <div className="font-bold text-slate-800 dark:text-slate-200 mb-2 group-hover:text-blue-700 transition-colors" style={{ marginLeft: '2em' }}>
         {qIdx + 1}. {q}
       </div>
       <ul className="space-y-3" style={{ marginLeft: '4em' }}>
@@ -125,10 +125,10 @@ const QuizBlock = ({ qIdx, q, options, a, showAllAnswers }) => {
           const isCorrect = (oIdx + 1 === a);
           return (
             <li key={oIdx} className="flex items-start data-quiz-opt" data-correct={isCorrect}>
-              <span className={`mr-2 font-bold leading-none ${isShow && isCorrect ? 'text-red-600' : 'text-slate-400'}`}>
+              <span className={`mr-2 font-bold leading-none ${isShow && isCorrect ? 'text-red-600' : 'text-slate-400 dark:text-slate-500'}`}>
                 {isShow && isCorrect ? '✓' : '□'}
               </span>
-              <span className={isShow && isCorrect ? 'text-red-600 font-bold' : 'text-slate-700'}>{opt}</span>
+              <span className={isShow && isCorrect ? 'text-red-600 font-bold' : 'text-slate-700 dark:text-slate-300 dark:text-slate-600'}>{opt}</span>
             </li>
           );
         })}
@@ -141,12 +141,12 @@ const PracticeBlock = ({ index, p, showAllAnswers }) => {
   // 移除 onClick 以避免「點擊一格跳出多格」的狀況，讓使用者必須準確點擊空格
   return (
     <div className="mb-6 select-none group">
-      <div className="font-bold text-slate-800 transition-colors" style={{ marginLeft: '2em' }}>
+      <div className="font-bold text-slate-800 dark:text-slate-200 transition-colors" style={{ marginLeft: '2em' }}>
         例句{['一','二','三','四','五','六'][index]}：<span className="font-normal">{p.ex}</span>
       </div>
-      <div className="font-bold text-slate-800 flex mt-1" style={{ marginLeft: '2em' }}>
+      <div className="font-bold text-slate-800 dark:text-slate-200 flex mt-1" style={{ marginLeft: '2em' }}>
         <span style={{ whiteSpace: 'pre' }}>{index === 0 ? '　  練習：' : '練習：'}</span>
-        <div className="font-normal text-slate-800">{parsePractice(p.pr, showAllAnswers)}</div>
+        <div className="font-normal text-slate-800 dark:text-slate-200">{parsePractice(p.pr, showAllAnswers)}</div>
       </div>
     </div>
   );
@@ -159,12 +159,12 @@ const SentenceBlock = ({ word, ex, showAllAnswers }) => {
   const cleanText = ex.replace(/[()]/g, '');
   return (
     <div className="mb-6 cursor-pointer select-none group" onClick={(e) => { if (checkTool()) return; setShowLocal(!showLocal); }}>
-      <div className="font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors" style={{ marginLeft: '2em' }}>
-        <span className="bg-slate-200 px-2 py-1 rounded mr-2 text-sm no-print">造句</span>{word}：
+      <div className="font-bold text-slate-800 dark:text-slate-200 mb-2 group-hover:text-blue-700 transition-colors" style={{ marginLeft: '2em' }}>
+        <span className="bg-slate-200 dark:bg-slate-600 px-2 py-1 rounded mr-2 text-sm no-print">造句</span>{word}：
       </div>
       <div className="leading-relaxed" style={{ marginLeft: '4em' }}>
         <span
-          className={`inline px-2 font-bold transition-colors border-b-[3px] data-blankword ${isShow ? 'text-red-600 border-red-300 bg-red-50' : 'text-transparent border-slate-400 bg-slate-100'}`}
+          className={`inline px-2 font-bold transition-colors border-b-[3px] data-blankword ${isShow ? 'text-red-600 border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/30' : 'text-transparent border-slate-400 bg-slate-100 dark:bg-slate-700'}`}
           data-text={cleanText}>
           {cleanText}
         </span>
@@ -178,13 +178,13 @@ const Task4QA = ({ q, a, showAllAnswers }) => {
   const isShow = showAllAnswers || showLocal;
   return (
     <div className="cursor-pointer select-none group" onClick={(e) => { if (checkTool()) return; setShowLocal(!showLocal); }}>
-      <div className="font-bold mb-2 text-slate-800 group-hover:text-blue-700 transition-colors" style={{ marginLeft: '2em' }}>
+      <div className="font-bold mb-2 text-slate-800 dark:text-slate-200 group-hover:text-blue-700 transition-colors" style={{ marginLeft: '2em' }}>
         問答題：{q}
       </div>
       <div className={`data-qa-ans text-red-600 font-bold leading-relaxed ${isShow ? 'block' : 'hidden'}`} style={{ marginLeft: '4em' }}>
         解答：{a}
       </div>
-      <div className={`data-qa-line data-qa-line-break text-slate-300 ${!isShow ? 'block' : 'hidden'}`} style={{ marginLeft: '4em' }}>
+      <div className={`data-qa-line data-qa-line-break text-slate-300 dark:text-slate-600 ${!isShow ? 'block' : 'hidden'}`} style={{ marginLeft: '4em' }}>
         ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
       </div>
     </div>
@@ -196,10 +196,10 @@ const Task4MC = ({ q, options, a, showAllAnswers }) => {
   const isShow = showAllAnswers || showLocal;
   return (
     <div className="cursor-pointer select-none group" onClick={(e) => { if (checkTool()) return; setShowLocal(!showLocal); }}>
-      <div className="font-bold mb-2 text-slate-800 group-hover:text-blue-700 transition-colors" style={{ marginLeft: '2em' }}>
+      <div className="font-bold mb-2 text-slate-800 dark:text-slate-200 group-hover:text-blue-700 transition-colors" style={{ marginLeft: '2em' }}>
         選擇題：{q}
       </div>
-      <ul className="space-y-2 mb-2 text-slate-700" style={{ marginLeft: '4em' }}>
+      <ul className="space-y-2 mb-2 text-slate-700 dark:text-slate-300 dark:text-slate-600" style={{ marginLeft: '4em' }}>
         {options.map((opt, oIdx) => (
           <li key={oIdx} className={`data-quiz-opt ${isShow && opt.startsWith(a) ? "text-red-600 font-bold" : ""}`} data-correct={opt.startsWith(a)}>
             <span className="hidden">□</span><span>{opt}</span>
@@ -209,14 +209,14 @@ const Task4MC = ({ q, options, a, showAllAnswers }) => {
       <div className={`data-mc-ans text-red-600 font-bold ${isShow ? 'block' : 'hidden'}`} style={{ marginLeft: '4em' }}>
         解答：{a}
       </div>
-      <div className={`data-qa-line text-slate-300 ${!isShow ? 'block' : 'hidden'}`} style={{ marginLeft: '4em' }}>
+      <div className={`data-qa-line text-slate-300 dark:text-slate-600 ${!isShow ? 'block' : 'hidden'}`} style={{ marginLeft: '4em' }}>
         ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
       </div>
     </div>
   );
 };
 
-export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen }) {
+export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen, isDarkMode, setIsDarkMode }) {
   const [showAllAnswers, setShowAllAnswers] = useState(false);
   const [resetKey, setResetKey] = useState(0);
   const [toolMode, setToolMode] = useState('none');
@@ -224,6 +224,10 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
   const [exportMargin, setExportMargin] = useState('standard');
   const [zoomLevel, setZoomLevel] = useState(1);
   const [isWidescreen, setIsWidescreen] = useState(false);
+  
+  // 畫布狀態
+  const [paths, setPaths] = useState([]);
+  const [currentPath, setCurrentPath] = useState(null);
 
   useEffect(() => {
     setShowAllAnswers(false);
@@ -276,10 +280,34 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
   }, [toolMode]);
 
   useEffect(() => {
-    document.body.className = `font-sans antialiased bg-slate-50 text-slate-800 ${toolMode === 'pen' ? 'cursor-pen' : toolMode === 'eraser' ? 'cursor-eraser' : ''}`;
+    document.body.className = `font-sans antialiased bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 ${toolMode === 'pen' ? 'cursor-pen' : toolMode === 'eraser' ? 'cursor-eraser' : ''}`;
   }, [toolMode]);
 
+  // 畫布事件處理
+  const handlePointerDown = (e) => {
+    if (toolMode !== 'draw') return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / zoomLevel;
+    const y = (e.clientY - rect.top) / zoomLevel;
+    setCurrentPath(`M ${x} ${y}`);
+  };
+
+  const handlePointerMove = (e) => {
+    if (toolMode !== 'draw' || !currentPath) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / zoomLevel;
+    const y = (e.clientY - rect.top) / zoomLevel;
+    setCurrentPath(prev => `${prev} L ${x} ${y}`);
+  };
+
+  const handlePointerUp = () => {
+    if (toolMode !== 'draw' || !currentPath) return;
+    setPaths(prev => [...prev, currentPath]);
+    setCurrentPath(null);
+  };
+
   const clearAllHighlight = () => {
+    setPaths([]);
     document.getElementById('printable-area')?.querySelectorAll('*').forEach(el => {
       if (isHighlightNode(el)) el.style.backgroundColor = '';
     });
@@ -389,56 +417,50 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
 
 
   if (!lesson) {
-    return <div className="p-10 text-center text-slate-500">請從左側選擇一份課文</div>;
+    return <div className="p-10 text-center text-slate-500 dark:text-slate-400 dark:text-slate-500">請從左側選擇一份課文</div>;
   }
 
   return (
     <div className="flex flex-col w-full h-full pb-20">
       {/* 控制台 */}
-      <div className="no-print bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 sticky top-0 z-40 flex flex-col md:flex-row justify-between items-center shadow-sm gap-4 shrink-0">
+      <div className="no-print bg-white dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 p-4 sticky top-0 z-40 flex flex-col md:flex-row justify-between items-center shadow-sm gap-4 shrink-0">
         <div className="font-bold text-xl text-blue-900 flex items-center gap-3">
           {!isSidebarOpen && (
-            <button onClick={() => setIsSidebarOpen(true)} className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors" title="開啟課程列表">
+            <button onClick={() => setIsSidebarOpen(true)} className="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300 dark:text-slate-600 rounded-lg transition-colors" title="開啟課程列表">
               <Menu size={20} />
             </button>
           )}
           國語課堂學習單
         </div>
         <div className="flex gap-3 flex-wrap justify-center items-center">
-          {/* 版權註記 */}
-          <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 p-1.5 rounded text-right leading-tight mr-1 hidden md:block">
-            學習單資料取自「翰林出版社」<br/>
-            網站內容僅限用於孩子學習使用<br/>
-            <span className="text-red-600 font-bold">切勿用於商業行為</span>
+          {/* 深色模式與全解答 */}
+          <div className="flex bg-slate-100 dark:bg-slate-700 rounded-lg p-1 border border-slate-200 dark:border-slate-600 shadow-sm">
+            <button onClick={() => setIsDarkMode(!isDarkMode)} className={`p-1.5 rounded-md transition-colors ${isDarkMode ? 'text-amber-400 bg-slate-800' : 'text-slate-500 hover:bg-slate-200'}`} title="深色模式切換">
+              {isDarkMode ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
+            <div className="w-px bg-slate-300 dark:bg-slate-600 mx-1 my-1"></div>
+            <button onClick={toggleShowAll} className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-sm font-bold transition-colors ${showAllAnswers ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300' : 'text-slate-600 hover:bg-slate-200 dark:text-slate-300 dark:hover:bg-slate-600'}`}>
+              {showAllAnswers ? <><EyeOff size={16}/> 隱藏解答</> : <><Eye size={16}/> 顯示全解答</>}
+            </button>
           </div>
-          {/* 縮放 */}
-          <div className="flex items-center gap-1 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
-            <button onClick={() => setZoomLevel(z => Math.max(0.5, parseFloat((z - 0.1).toFixed(1))))} className="p-1 hover:bg-white rounded text-slate-600" title="縮小"><ZoomOut size={18} /></button>
-            <span className="text-sm font-bold w-12 text-center text-slate-700">{Math.round(zoomLevel * 100)}%</span>
-            <button onClick={() => setZoomLevel(z => Math.min(2, parseFloat((z + 0.1).toFixed(1))))} className="p-1 hover:bg-white rounded text-slate-600" title="放大"><ZoomIn size={18} /></button>
+
+          {/* 字體大小 */}
+          <div className="flex items-center bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+            <button onClick={() => setZoomLevel(0.8)} className={`px-3 py-1.5 text-sm font-bold transition-colors ${zoomLevel === 0.8 ? 'bg-blue-500 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>A-</button>
+            <button onClick={() => setZoomLevel(1)} className={`px-3 py-1.5 text-sm font-bold transition-colors border-x border-slate-200 dark:border-slate-600 ${zoomLevel === 1 ? 'bg-blue-500 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>A</button>
+            <button onClick={() => setZoomLevel(1.3)} className={`px-3 py-1.5 text-sm font-bold transition-colors ${zoomLevel === 1.3 ? 'bg-blue-500 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>A+</button>
           </div>
-          {/* 拉寬 */}
-          <button onClick={() => setIsWidescreen(!isWidescreen)} className={`px-3 py-1.5 rounded-lg text-sm font-bold border transition-colors ${isWidescreen ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>
+
+          {/* 拉寬版面 */}
+          <button onClick={() => setIsWidescreen(!isWidescreen)} className={`px-3 py-1.5 rounded-lg text-sm font-bold border transition-colors shadow-sm ${isWidescreen ? 'bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-300 dark:border-indigo-800' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>
             {isWidescreen ? '縮回版面' : '拉寬版面'}
           </button>
-          {/* 版面設定 */}
-          <div className="flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-lg border border-slate-200">
-            <label className="text-sm font-bold text-slate-700 flex items-center">版面：
-              <select className="ml-1 border-slate-300 rounded text-sm p-1" value={exportSize} onChange={e => setExportSize(e.target.value)}>
-                <option value="A4">A4</option><option value="B4">B4</option><option value="A3">A3</option>
-              </select>
-            </label>
-            <label className="text-sm font-bold text-slate-700 flex items-center">邊界：
-              <select className="ml-1 border-slate-300 rounded text-sm p-1" value={exportMargin} onChange={e => setExportMargin(e.target.value)}>
-                <option value="standard">標準</option><option value="wide">寬</option><option value="narrow">窄</option>
-              </select>
-            </label>
+
+          {/* 匯出區塊 (隱藏細節版面設定以簡化介面，預設為A4標準) */}
+          <div className="flex rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm">
+            <button onClick={() => exportToWord('teacher')} className="bg-teal-600 hover:bg-teal-700 text-white px-3 py-1.5 font-bold text-sm">匯出教用版</button>
+            <button onClick={() => exportToWord('student')} className="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 font-bold text-sm">匯出學用版</button>
           </div>
-          <button onClick={toggleShowAll} className="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded-lg font-bold shadow-sm transition-colors text-sm">
-            {showAllAnswers ? '🔒 隱藏全解答' : '👁️ 顯示全解答'}
-          </button>
-          <button onClick={() => exportToWord('teacher')} className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg shadow font-bold text-sm">匯出教用版</button>
-          <button onClick={() => exportToWord('student')} className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg shadow font-bold text-sm">匯出學用版</button>
         </div>
       </div>
 
@@ -447,23 +469,38 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
         <div
           key={`content-${lesson.id}-${resetKey}`}
           id="printable-area"
-          className={`relative w-full ${isWidescreen ? 'max-w-[1200px]' : 'max-w-[850px]'} bg-white p-10 md:p-16 shadow-xl rounded-xl border border-slate-100 content-area self-start`}
+          className={`relative w-full ${isWidescreen ? 'max-w-[1200px]' : 'max-w-[850px]'} bg-white dark:bg-slate-800 p-10 md:p-16 shadow-xl rounded-xl border border-slate-100 dark:border-slate-700 content-area self-start`}
           style={{ zoom: zoomLevel }}
         >
+          {/* 畫布層 (絕對定位覆蓋整個區域) */}
+          <svg 
+            className={`absolute inset-0 w-full h-full z-30 pointer-events-${toolMode === 'draw' ? 'auto' : 'none'} no-print`}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
+          >
+            {paths.map((p, i) => (
+              <path key={i} d={p} stroke="red" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            ))}
+            {currentPath && (
+              <path d={currentPath} stroke="red" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            )}
+          </svg>
 
-          <h1 className="font-bold text-center mb-4 text-slate-800 text-2xl relative z-10">
+          <h1 className="font-bold text-center mb-4 text-slate-800 dark:text-slate-200 text-2xl relative z-10">
             115 六上國語學習講義翰林版 {lesson.lessonNum} {lesson.lessonName} 作者：{lesson.author}
           </h1>
-          <div className="text-center font-bold text-xl mb-12 text-slate-800">
+          <div className="text-center font-bold text-xl mb-12 text-slate-800 dark:text-slate-200">
             班級：_______ 座號：_______ 姓名：_____________
           </div>
 
           {lesson.task1 && lesson.task1.length > 0 && (
             <section className="mb-14">
-              <h2 className="font-bold text-slate-800 text-xl mb-4">任務一、文意理解，深入認識課文</h2>
+              <h2 className="font-bold text-slate-800 dark:text-slate-200 text-xl mb-4">任務一、文意理解，深入認識課文</h2>
               <div className="mb-8 space-y-2">
                 {lesson.task1.map((item, i) => (
-                  <div key={i} style={{ marginLeft: `${item.indent * 2}em` }} className={`leading-relaxed ${item.isBox ? 'border-2 border-slate-800 p-4 rounded bg-white my-4 font-bold' : ''}`}>
+                  <div key={i} style={{ marginLeft: `${item.indent * 2}em` }} className={`leading-relaxed ${item.isBox ? 'border-2 border-slate-800 p-4 rounded bg-white dark:bg-slate-800 my-4 font-bold' : ''}`}>
                     {parseTask1(item.text, showAllAnswers)}
                   </div>
                 ))}
@@ -473,7 +510,7 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
 
           {lesson.quiz && lesson.quiz.length > 0 && (
             <section className="mb-14">
-              <h2 className="font-bold text-slate-800 text-xl mb-4 leading-relaxed">
+              <h2 className="font-bold text-slate-800 dark:text-slate-200 text-xl mb-4 leading-relaxed">
                 任務二、閱讀測驗，讀完課文之後，你了解課文內容和作者的想法嗎？<br />
                 請依據課文回答下面的問題。（在□裡打「✓」）
               </h2>
@@ -485,7 +522,7 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
 
           {(lesson.practices || lesson.sentences) && (
             <section className="mb-14">
-              <h2 className="font-bold text-slate-800 text-xl mb-4">任務三、句型練習</h2>
+              <h2 className="font-bold text-slate-800 dark:text-slate-200 text-xl mb-4">任務三、句型練習</h2>
               {lesson.practices && (
                 <div className="space-y-8 mt-6">
                   {lesson.practices.map((p, i) => <PracticeBlock key={i} index={i} p={p} showAllAnswers={showAllAnswers} />)}
@@ -501,19 +538,19 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
 
           {lesson.task4 && (
             <section className="mb-10">
-              <h2 className="font-bold text-slate-800 text-xl mb-4">挑戰任務、寫作引導，本課文本要點</h2>
+              <h2 className="font-bold text-slate-800 dark:text-slate-200 text-xl mb-4">挑戰任務、寫作引導，本課文本要點</h2>
               <div className="mt-6">
-                <div className="mb-4 font-bold text-slate-800" style={{ marginLeft: '2em' }}>
+                <div className="mb-4 font-bold text-slate-800 dark:text-slate-200" style={{ marginLeft: '2em' }}>
                   寫作主題：<span className="font-normal">{lesson.task4.theme}</span>
                 </div>
                 <div className="mb-6">
-                  <div className="font-bold text-slate-800 mb-2" style={{ marginLeft: '2em' }}>◎課文分析師</div>
-                  <div className="text-slate-700 leading-relaxed" style={{ marginLeft: '4em' }} dangerouslySetInnerHTML={{ __html: lesson.task4.analyst }} />
+                  <div className="font-bold text-slate-800 dark:text-slate-200 mb-2" style={{ marginLeft: '2em' }}>◎課文分析師</div>
+                  <div className="text-slate-700 dark:text-slate-300 dark:text-slate-600 leading-relaxed" style={{ marginLeft: '4em' }} dangerouslySetInnerHTML={{ __html: lesson.task4.analyst }} />
                 </div>
                 {lesson.task4.magic && (
                   <div className="mb-6">
-                    <div className="font-bold text-slate-800 mb-2" style={{ marginLeft: '2em' }}>◎主題魔法書</div>
-                    <div className="text-slate-700 leading-relaxed" style={{ marginLeft: '4em' }} dangerouslySetInnerHTML={{ __html: lesson.task4.magic }} />
+                    <div className="font-bold text-slate-800 dark:text-slate-200 mb-2" style={{ marginLeft: '2em' }}>◎主題魔法書</div>
+                    <div className="text-slate-700 dark:text-slate-300 dark:text-slate-600 leading-relaxed" style={{ marginLeft: '4em' }} dangerouslySetInnerHTML={{ __html: lesson.task4.magic }} />
                   </div>
                 )}
                 <div className="mb-6 space-y-6 mt-8">
@@ -527,10 +564,12 @@ export default function HandoutViewer({ lesson, isSidebarOpen, setIsSidebarOpen 
       </div>
 
       {/* 浮動工具列 */}
-      <div className="no-print fixed bottom-8 right-8 bg-white/90 backdrop-blur-md p-3 rounded-full shadow-2xl border border-slate-200 flex flex-col space-y-3 z-50">
-        <button onClick={() => setToolMode(toolMode === 'pen' ? 'none' : 'pen')} className={`p-4 rounded-full transition-all ${toolMode === 'pen' ? 'bg-yellow-300 text-yellow-800 shadow-inner' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}`} title="螢光筆畫記 (選取文字來畫記)"><PenTool size={24} /></button>
-        <button onClick={() => setToolMode(toolMode === 'eraser' ? 'none' : 'eraser')} className={`p-4 rounded-full transition-all ${toolMode === 'eraser' ? 'bg-pink-300 text-pink-800 shadow-inner' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}`} title="橡皮擦 (點擊螢光筆，或選取文字來擦除)"><Eraser size={24} /></button>
-        <button onClick={clearAllHighlight} className="p-4 rounded-full bg-slate-100 hover:bg-red-100 hover:text-red-600 text-slate-600 transition-colors" title="清除所有畫記"><Trash2 size={24} /></button>
+      <div className="no-print fixed bottom-8 right-8 bg-white dark:bg-slate-800/90 backdrop-blur-md p-3 rounded-full shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col space-y-3 z-50">
+        <button onClick={() => setToolMode(toolMode === 'draw' ? 'none' : 'draw')} className={`p-4 rounded-full transition-all ${toolMode === 'draw' ? 'bg-red-500 text-white shadow-inner' : 'bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300'}`} title="自由手繪 (直接在講義上畫線)"><Brush size={24} /></button>
+        <button onClick={() => setToolMode(toolMode === 'pen' ? 'none' : 'pen')} className={`p-4 rounded-full transition-all ${toolMode === 'pen' ? 'bg-yellow-300 text-yellow-800 shadow-inner' : 'bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300'}`} title="螢光筆畫記 (選取文字來畫記)"><PenTool size={24} /></button>
+        <button onClick={() => setToolMode(toolMode === 'eraser' ? 'none' : 'eraser')} className={`p-4 rounded-full transition-all ${toolMode === 'eraser' ? 'bg-pink-300 text-pink-800 shadow-inner' : 'bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300'}`} title="橡皮擦 (點擊螢光筆，或選取文字來擦除)"><Eraser size={24} /></button>
+        <div className="w-full h-px bg-slate-200 dark:bg-slate-600"></div>
+        <button onClick={clearAllHighlight} className="p-4 rounded-full bg-slate-100 dark:bg-slate-700 hover:bg-red-100 dark:hover:bg-red-900/50 hover:text-red-600 dark:hover:text-red-400 text-slate-600 dark:text-slate-300 transition-colors" title="清除所有畫記與手繪"><Trash2 size={24} /></button>
       </div>
     </div>
   );
