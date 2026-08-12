@@ -55,12 +55,12 @@ const TableContent = ({ html, globalShow }) => {
       const isRevealed = blank.classList.contains('text-red-600');
       // 如果 globalShow 為 true，強迫顯示；如果為 false，隱藏 (除非有手動揭開)
       if (globalShow) {
-        blank.classList.remove('text-transparent', 'bg-slate-100 dark:bg-slate-700', 'border-slate-400');
-        blank.classList.add('text-red-600', 'bg-red-50 dark:bg-red-900/30', 'border-red-300 dark:border-red-800');
+        blank.classList.remove('text-transparent', 'bg-slate-100', 'dark:bg-slate-700', 'border-slate-400');
+        blank.classList.add('text-red-600', 'bg-red-50', 'dark:bg-red-900/30', 'border-red-300', 'dark:border-red-800');
       } else {
         if (!isRevealed) {
-          blank.classList.add('text-transparent', 'bg-slate-100 dark:bg-slate-700', 'border-slate-400');
-          blank.classList.remove('text-red-600', 'bg-red-50 dark:bg-red-900/30', 'border-red-300 dark:border-red-800');
+          blank.classList.add('text-transparent', 'bg-slate-100', 'dark:bg-slate-700', 'border-slate-400');
+          blank.classList.remove('text-red-600', 'bg-red-50', 'dark:bg-red-900/30', 'border-red-300', 'dark:border-red-800');
         }
       }
     });
@@ -73,11 +73,11 @@ const TableContent = ({ html, globalShow }) => {
       e.stopPropagation();
       const isHidden = blank.classList.contains('text-transparent');
       if (isHidden) {
-        blank.classList.remove('text-transparent', 'bg-slate-100 dark:bg-slate-700', 'border-slate-400');
-        blank.classList.add('text-red-600', 'bg-red-50 dark:bg-red-900/30', 'border-red-300 dark:border-red-800');
+        blank.classList.remove('text-transparent', 'bg-slate-100', 'dark:bg-slate-700', 'border-slate-400');
+        blank.classList.add('text-red-600', 'bg-red-50', 'dark:bg-red-900/30', 'border-red-300', 'dark:border-red-800');
       } else {
-        blank.classList.add('text-transparent', 'bg-slate-100 dark:bg-slate-700', 'border-slate-400');
-        blank.classList.remove('text-red-600', 'bg-red-50 dark:bg-red-900/30', 'border-red-300 dark:border-red-800');
+        blank.classList.add('text-transparent', 'bg-slate-100', 'dark:bg-slate-700', 'border-slate-400');
+        blank.classList.remove('text-red-600', 'bg-red-50', 'dark:bg-red-900/30', 'border-red-300', 'dark:border-red-800');
       }
     }
   };
