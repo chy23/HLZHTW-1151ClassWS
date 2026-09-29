@@ -32,3 +32,21 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./final_dist
           keep_files: false
+
+      - name: Deploy individual lessons to branches
+        run: |
+          for i in {1..12}; do
+            BRANCH="115-1-L$i"
+            DIR="./final_dist/$BRANCH"
+            if [ -d "$DIR" ]; then
+              echo "Deploying $BRANCH..."
+              cd "$DIR"
+              git init
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
+              git add .
+              git commit -m "Deploy $BRANCH"
+              git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master:"$BRANCH"
+              cd ../../
+            fi
+          done
